@@ -5,7 +5,7 @@ FROM node:14
 WORKDIR /app
 
 # Copy the HTML and CSS files to the container
-COPY /3tier-architecture-with-cicd/to-do-code/index.html /3tier-architecture-with-cicd/to-do-code/style.css /app/
+COPY main.html style.css /app/
 
 # Expose port 3000
 EXPOSE 3000
