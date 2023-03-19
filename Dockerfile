@@ -1,21 +1,14 @@
-# Base image
-FROM node:14-alpine
+# Use a Node.js runtime as the base image
+FROM node:14
 
-# Set the working directory
+# Set the working directory inside the container
 WORKDIR /app
 
-# Copy the package.json and package-lock.json files and install dependencies
-COPY package*.json ./
-RUN npm install
+# Copy the HTML and CSS files to the container
+COPY to-do-code/index.html to-do-code/style.css /app/
 
-# Copy the source code
-COPY . .
-
-# Build the app
-RUN npm run build
-
-# Expose the port on which the app will run
+# Expose port 3000
 EXPOSE 3000
 
-# Start the app
-CMD ["npm", "start"]
+# Start a simple HTTP server to serve the HTML file
+CMD ["npx", "http-server", "-p", "3000"]
