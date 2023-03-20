@@ -1,20 +1,28 @@
-pipeline{
-    agent any
+pipeline {
+    agent { label 'node-agent' }
+    
     stages{
-        stage("Building"){
+        stage('Code'){
             steps{
-                sh `docker build -t todo-app:latest`
-                echo "Building the application Image"
+                git url: 'https://github.com/sanket363/3tier-architecture-with-cicd', branch: 'main' 
             }
         }
-        stages("Pushing"){
+        stage('Build and Test'){
             steps{
-                sh `docker push -t todo-app:latest`
+                sh 'docker build . -t snaket2628/todo-app'
             }
         }
-        stages("Deploying"){
+        stage('Push'){
             steps{
-                sh `docker run -d -p 3000:3000 -t todo-app:latest`
+                withCredentials([usernamePassword(credentialsId: 'dockerHub', passwordVariable: 'dockerHubPassword', usernameVariable: 'dockerHubUser')]) {
+        	     sh "docker login -u ${env.dockerHubUser} -p ${env.dockerHubPassword}"
+                 sh 'docker push snaket2628/todo-app:latest'
+                }
+            }
+        }
+        stage('Deploy'){
+            steps{
+                sh "kubectl apply -f deploy.yaml -n my-namespace"
             }
         }
     }
