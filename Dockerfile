@@ -5,7 +5,7 @@ FROM node:14
 WORKDIR /app
 
 # Copy the HTML and CSS files to the container
-COPY main.html style.css /app/
+COPY index.html style.css /app/
 
 # Expose port 3000
 EXPOSE 3000
